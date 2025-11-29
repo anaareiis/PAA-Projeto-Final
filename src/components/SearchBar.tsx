@@ -1,26 +1,44 @@
 import React, { useState } from 'react'
+import { Search, ArrowRight } from 'lucide-react'
 
-type Props = { initial?: string; onSearch: (q: string) => void; placeholder?: string }
-export default function SearchBar({ initial = '', onSearch, placeholder = 'Pergunte alguma coisa' }: Props){
-  const [q, setQ] = useState(initial)
+interface SearchBarProps {
+  onSearch: (term: string) => void
+}
+
+export default function SearchBar({ onSearch }: SearchBarProps) {
+  const [term, setTerm] = useState('')
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (term.trim()) {
+      onSearch(term)
+    }
+  }
+
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <div className="flex items-center bg-white rounded-full shadow px-4 py-2">
-        <input
-          value={q}
-          onChange={(e)=>setQ(e.target.value)}
-          onKeyDown={(e)=> e.key === 'Enter' && onSearch(q)}
-          className="flex-1 outline-none px-2"
-          placeholder={placeholder}
-        />
-      <button aria-label="Buscar" onClick={() => onSearch(q)} className="p-2">
-        <img 
-          src="/assets/Seta para cima.png" 
-          alt="Buscar" 
-          className="w-5 h-5" 
-        />
-      </button>
+    <form onSubmit={handleSubmit} className="w-full relative flex items-center">
+      {/* Ícone de Lupa à esquerda */}
+      <div className="absolute left-4 text-slate-400">
+        <Search size={20} />
       </div>
-    </div>
+
+      {/* Input Transparente (o container pai no Home já tem a cor de fundo) */}
+      <input
+        type="text"
+        value={term}
+        onChange={(e) => setTerm(e.target.value)}
+        placeholder="Pergunte sobre algoritmos, complexidade..."
+        className="w-full bg-transparent text-slate-200 placeholder-slate-500 py-4 pl-12 pr-12 rounded-xl outline-none text-lg"
+      />
+
+      {/* Botão de Enviar (só aparece se tiver texto ou pode ficar fixo) */}
+      <button
+        type="submit"
+        disabled={!term.trim()}
+        className="absolute right-3 p-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg transition-colors disabled:opacity-0 disabled:pointer-events-none"
+      >
+        <ArrowRight size={20} />
+      </button>
+    </form>
   )
 }

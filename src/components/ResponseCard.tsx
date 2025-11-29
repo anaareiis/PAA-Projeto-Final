@@ -1,15 +1,20 @@
 import React from 'react'
 
-export default function ResponseCard({ text }: { text: string }){
+interface ResponseCardProps {
+  text: string
+}
+
+export default function ResponseCard({ text }: ResponseCardProps) {
   return (
-    <div className="space-y-4 text-gray-800">
-      {text ? (
-        <div className="prose max-w-none">
-          <p>{text}</p>
-        </div>
-      ) : (
-        <div className="text-gray-500">Sem resposta.</div>
-      )}
+    <div className="
+      p-6 
+      bg-slate-800/50 
+      border border-slate-700 
+      rounded-2xl 
+      leading-relaxed 
+      shadow-sm
+      text-slate-200">
+      <p className="whitespace-pre-wrap">{text}</p>
     </div>
   )
 }
